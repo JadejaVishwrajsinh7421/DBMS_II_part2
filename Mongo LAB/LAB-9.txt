@@ -56,7 +56,7 @@ db.Depsosit.find().sort({CNAME:1})
 
 10. Display all the documents of Deposit collection on descending order by BNAME.
 
-db.Depsosit.find().sort({CNAME:1})
+db.Depsosit.find().sort({CNAME:-1})
  
 11. Display all the documents of Deposit collection on ascending order by ACTNO and descending order by 
 AMOUNT. 

@@ -1,6 +1,6 @@
 use CSE_4B_355
 
---Part – A 
+--Part ï¿½ A 
 --1.	INSERT Procedures: Create stored procedures to insert records into STUDENT tables (SP_INSERT_STUDENT
 CREATE OR ALTER PROC PR_INSERT_STUDENT 
 @StuID 	INT ,
@@ -58,7 +58,7 @@ CREATE OR ALTER PROC PR_DELETE_STUDENT
 AS 
 BEGIN
 	DELETE FROM STUDENT
-	WHERE StudentID = @NAME
+	WHERE StuNAME = @NAME
 END
 
 EXEC PR_DELETE_STUDENT 'Om Patel'
@@ -87,7 +87,7 @@ END
 
 EXEC PR_SELECT_5
 
---Part – B  
+--Part ï¿½ B  
 
 --7.	Create a stored procedure which displays faculty designation-wise count.
 CREATE OR ALTER PROC PR_COUNT_FACULTY
@@ -111,7 +111,7 @@ END
 
 EXEC PR_STU_DEPT 'ECE'
 
---Part – C 
+--Part ï¿½ C 
 --9.	Create a stored procedure which displays department-wise maximum, minimum, and average credits of courses.
 CREATE OR ALTER PROC PR_CREDITS
 AS BEGIN 
