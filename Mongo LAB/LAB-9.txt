@@ -2,15 +2,15 @@ Part - A
 
 1. Retrieve/Display every document of Deposit collection. 
 
-db.Depsosit.find()
+db.Deposit.find()
 
 2. Display only one document of Deposit collection. (Use: findOne()) 
 
-db.Depsosit.findOne()
+db.Deposit.findOne()
 
 3. Insert following document into Deposit collection. (Use: insertOne())
 
-db.Depsosit.insertOne({
+db.Deposit.insertOne({
   ACTNO: 109,
   CNAME: 'KIRTI',
   BNAME: 'VIRAR',
@@ -19,7 +19,7 @@ db.Depsosit.insertOne({
 
 4. Insert following documents into Deposit collection. (Use: insertMany())  
 
-db.Depsosit.insertMany([{ 
+db.Deposit.insertMany([{ 
   ACTNO: 110,
   CNAME: 'MITALI',
   BNAME: 'ANDHERI',
@@ -34,52 +34,52 @@ db.Depsosit.insertMany([{
 
 5. Display all the documents of ‘VIRAR’ branch from Deposit collection. 
 
-db.Depsosit.find({BNAME:'VIRAR'})
+db.Deposit.find({BNAME:'VIRAR'})
 
 
 6. Display all the documents of Deposit collection whose amount is between 3000 and 5000. 
 
-db.Depsosit.find({AMOUNT:{$gte: 3000, $lte: 5000}})
+db.Deposit.find({AMOUNT:{$gte: 3000, $lte: 5000}})
 
 7. Display all the documents of Deposit collection whose amount is greater than 2000 and branch is VIRAR. 
 
-db.Depsosit.find({$and:[{AMOUNT:{$gte:2000}},{BNAME:'VIRAR'}] })
+db.Deposit.find({$and:[{AMOUNT:{$gte:2000}},{BNAME:'VIRAR'}] })
 
 
 8. Display all the documents with CNAME, BNAME and AMOUNT fields from Deposit collection.
 
-db.Depsosit.find({},{CNAME:1, BNAME:1,AMOUNT:1})
+db.Deposit.find({},{CNAME:1, BNAME:1, AMOUNT:1, _id:0})
 
 9. Display all the documents of Deposit collection on ascending order by CNAME. 
 
-db.Depsosit.find().sort({CNAME:1})
+db.Deposit.find().sort({CNAME:1})
 
 10. Display all the documents of Deposit collection on descending order by BNAME.
 
-db.Depsosit.find().sort({CNAME:-1})
+db.Deposit.find().sort({BNAME:-1})
  
 11. Display all the documents of Deposit collection on ascending order by ACTNO and descending order by 
 AMOUNT. 
 
-db.Depsosit.find().sort({ACTNO:1,AMOUNT:-1})
+db.Deposit.find().sort({ACTNO:1,AMOUNT:-1})
 
 
 12. Display only two documents of Deposit collection.
 
-db.Depsosit.find().limit(2)
+db.Deposit.find().limit(2)
 
 13. Display 3rd document of Deposit collection. 
  
-db.Depsosit.find().skip(2).limit(1)
+db.Deposit.find().skip(2).limit(1)
 
 14. Display 6th and 7th documents of Deposit collection.  
 
-db.Depsosit.find().skip(5).limit(2)
+db.Deposit.find().skip(5).limit(2)
 
 
 15. Display the count of documents in Deposit collection. 
 
-db.Depsosit.countDocuments()
+db.Deposit.countDocuments()
 
 
 Part-B
@@ -173,7 +173,7 @@ db.student.find().skip(3).limit(2)
 
 5. Display the name of oldest student from "Student" collection. 
 
-db.student.find().sort({age:-1}).limit(1)
+db.student.find({},{name:1, age:1, _id:0}).sort({age:-1}).limit(1)
 
 
 6. Display all documents of "Student" collection in such a way that skip the first 2 documents and return the rest documents.  

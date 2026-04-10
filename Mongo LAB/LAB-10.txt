@@ -123,36 +123,126 @@ a. Ecode and Ename are compulsory fields
 b. Datatype of EID is int, Ename is string, Age is int and City is string 
 Insert following documents into above “Employee” collection. 
 
+db.createCollection("Employee", {
+   capped: true,
+   size: 5242880,
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["Ecode", "Ename"],
+         properties: {
+            EID: { bsonType: "int" },
+            Ename: { bsonType: "string" },
+            Age: { bsonType: "int" },
+            City: { bsonType: "string" }
+         }
+      }
+   }
+})
+
 
 Part – B Create collection named “Student_data” and insert following 10 documents into it. 
 
 1. Display Female students and belong to Rajkot city. 
-2. Display students not studying in 3rd sem. 
+db.Student_data.find({Gender: "Female", City: "Rajkot"})
+
+2. Display students not studying in 3rd sem.
+ db.Student_data.find({Sem: {$ne: 3}})
+
 3. Display students whose city is Jamnagar or Baroda. (use: IN) 
+db.Student_data.find({City: {$in: ["Jamnagar", "Baroda"]}})
+
 4. Display first 2 students names who lives in Baroda. 
+db.Student_data.find({City: "Baroda"}).limit(2)
+
 5. Display Male students who studying in 3rd sem. 
+db.Student_data.find({Gender: "Male", Sem: 3})
+
 6. Display sname and city and fees of those students whose roll no is less than 105. 
+db.Student_data.find({RollNo: {$lt: 105}}, {Sname: 1, City: 1, Fees: 1, _id: 0})
+
 7. Update City of all students from 'Jamnagar' City and Department as 'CE' to 'Surat'. 
+db.Student_data.updateMany({City: "Jamnagar", Department: "CE"}, {$set: {City: "Surat"}})
+
 8. Increase Fees by 500 where the Gender is not 'Female'. (Use: Not) 
+db.Student_data.updateMany({Gender: {$ne: "Female"}}, {$inc: {Fees: 500}})
+
 9. Set the Department of all students from 'EE' and in Sem 3 to 'Electrical'. 
+db.Student_data.updateMany({Department: "EE", Sem: 3}, {$set: {Department: "Electrical"}})
+
 10. Update the Fees of students in 'Rajkot' who are male. 
+db.Student_data.updateMany({City: "Rajkot", Gender: "Male"}, {$set: {Fees: 12000}})
+
 11. Change City to 'Vadodara' for students in Sem 5 and with fees less than 10000. 
+db.Student_data.updateMany({Sem: 5, Fees: {$lt: 10000}}, {$set: {City: "Vadodara"}})
+
 12. Delete all students where the City is 'Ahmedabad' or GENDER is 'Male'. 
+db.Student_data.deleteMany({$or: [{City: "Ahmedabad"}, {Gender: "Male"}]})
+
 13. Delete students whose Rollno is not in the list [101, 105, 110]. 
+db.Student_data.deleteMany({RollNo: {$nin: [101, 105, 110]}})
+
 14. Delete students from the 'Civil' department who are in Sem 5 or Sem 7. 
+db.Student_data.deleteMany({Department: "Civil", Sem: {$in: [5, 7]}})
+
 15. Delete all students who are not in the cities 'Rajkot', 'Baroda', or 'Jamnagar'. 
+db.Student_data.deleteMany({City: {$nin: ["Rajkot", "Baroda", "Jamnagar"]}})
+
 16. Delete students whose Rollno is between 105 and 108. 
+db.Student_data.deleteMany({RollNo: {$gte: 105, $lte: 108}})
+
 17. Rename the City field to LOCATION for all students. 
+db.Student_data.updateMany({}, {$rename: {"City": "LOCATION"}})
+
 18. Rename the Department field to Branch where the Fees is less than 10000. 
-19. Rename Sname to Fullname for students with Rollno in [106, 107, 108]. 
+db.Student_data.updateMany({Fees: {$lt: 10000}}, {$rename: {"Department": "Branch"}}) 
+
+19. Sname to Fullname for students with Rollno in [106, 107, 108]. 
+db.Student_data.updateMany({RollNo: {$in: [106, 107, 108]}}, {$rename: {"Sname": "Fullname"}})
+
 20. Rename Fees to Tuition_Fees for all students with Fees greater than 9000. 
+db.Student_data.updateMany({Fees: {$gt: 9000}}, {$rename: {"Fees": "Tuition_Fees"}})
+
 21. Rename Department to Major where the Fees is less than 15000 and Gender is 'Female'. 
-22. Rename City to Hometown for all students whose SEM is 3 and Department is not 'Mechanical'. 
+db.Student_data.updateMany({Fees: {$lt: 15000}, Gender: "Female"}, {$rename: {"Department": "Major"}})
+
+22. Rename City to Hometown for all students whose SEM is 3 and Department is not 
+'Mechanical'. 
+db.Student_data.updateMany({SEM: 3, Department: {$ne: "Mechanical"}}, {$rename: {"City": "Hometown"}})
+
 Part – C 
-1. Create a capped collection named” logs” with a maximum size of 100 KB and a maximum of 10 
-documents. 
-2. Insert below 12 log entries into the “logs” collection. Each entry should contain a message, level (e.g., 
+
+1. Create a capped collection named" logs" with a maximum size of 100 KB and a maximum of 10 documents. 
+db.createCollection("logs", {capped: true, size: 102400, max: 10})
+
+2. Insert below 12 log entries into the “logs” collection. Each entry should contain a 
+message, level (e.g., 
 "info", "warning", "error"), and a timestamp field. Use the insertMany() method. 
-3. Perform find method on “logs” collection to ensure only the last 10 documents are retained (even 
-though you inserted 12).  
+db.logs.insertMany([
+  {message: "Application started", level: "info", timestamp: new Date()},
+  {message: "User logged in", level: "info", timestamp: new Date()},
+  {message: "Database connection established", level: "info", timestamp: new Date()},
+  {message: "API request received", level: "info", timestamp: new Date()},
+  {message: "Cache miss detected", level: "warning", timestamp: new Date()},
+  {message: "Slow query detected", level: "warning", timestamp: new Date()},
+  {message: "Disk space low", level: "warning", timestamp: new Date()},
+  {message: "Connection timeout", level: "error", timestamp: new Date()},
+  {message: "Database error occurred", level: "error", timestamp: new Date()},
+  {message: "Invalid input received", level: "error", timestamp: new Date()},
+  {message: "Service unavailable", level: "error", timestamp: new Date()},
+  {message: "Critical system failure", level: "error", timestamp: new Date()}
+])
+
+3. Perform find method on "logs" collection to ensure only the last 10 documents are retained (even though you inserted 12). 
+db.logs.find()
+ 
 4. Insert below 5 more documents and check if the oldest ones are automatically removed.
+
+db.logs.insertMany([
+  {message: "System recovery started", level: "info", timestamp: new Date()},
+  {message: "Backup completed", level: "info", timestamp: new Date()},
+  {message: "Configuration reloaded", level: "info", timestamp: new Date()},
+  {message: "Memory usage spike", level: "warning", timestamp: new Date()},
+  {message: "Network latency increased", level: "warning", timestamp: new Date()}
+])
+db.logs.find()  // Check that only 10 documents remain (oldest 7 are automatically removed)
